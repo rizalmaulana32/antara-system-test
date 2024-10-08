@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
-import CommitList from "@/components/CommitList";
+import CommitList from "../components/CommitList";
 
 interface Commit {
   sha: string;
@@ -37,8 +37,8 @@ const RepoCommits = () => {
       );
       setCommits(response.data);
     } catch (err) {
-      setError("Failed to fetch commits.");
       console.error(err);
+      setError("Failed to fetch commits.");
     }
     setLoading(false);
   };
@@ -48,10 +48,12 @@ const RepoCommits = () => {
   }, [repo]);
 
   return (
-    <div>
-      <h1>Recent Commits for {repo}</h1>
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10">
+      <h1 className="text-3xl font-bold text-gray-800 mb-8">
+        Recent Commits for {repo}
+      </h1>
       {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
+      {error && <p className="text-red-500">{error}</p>}
       <CommitList commits={commits} />
     </div>
   );

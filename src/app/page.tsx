@@ -1,7 +1,8 @@
 "use client";
 import { useState, useEffect, ChangeEvent } from "react";
 import axios from "axios";
-import RepoList from "@/components/RepoList";
+import RepoList from "../components/RepoList";
+import { FiSearch } from "react-icons/fi";
 
 interface Repo {
   id: number;
@@ -10,7 +11,7 @@ interface Repo {
 }
 
 const Home = () => {
-  const [orgName, setOrgName] = useState<string>("apache"); // Default organization
+  const [orgName, setOrgName] = useState<string>("apache");
   const [repos, setRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -28,11 +29,11 @@ const Home = () => {
         }
       );
       setRepos(
-        response.data.sort((a, b) => b.stargazers_count - a.stargazers_count) // Sort by stars
+        response.data.sort((a, b) => b.stargazers_count - a.stargazers_count)
       );
     } catch (err) {
-      setError("Failed to fetch repositories.");
       console.error(err);
+      setError("Failed to fetch repositories.");
     }
     setLoading(false);
   };
@@ -46,18 +47,29 @@ const Home = () => {
   };
 
   return (
-    <div>
-      <h1>GitHub Projects Browser</h1>
-      <input
-        type="text"
-        value={orgName}
-        onChange={handleOrgNameChange}
-        placeholder="Enter GitHub organization name"
-      />
-      <button onClick={fetchRepos}>Search</button>
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10">
+      <h1 className="text-3xl font-bold text-gray-800 mb-8">
+        GitHub Projects Browser
+      </h1>
+      <div className="w-full max-w-lg flex items-center space-x-3 mb-6">
+        <input
+          type="text"
+          value={orgName}
+          onChange={handleOrgNameChange}
+          className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Enter GitHub organization name"
+        />
+        <button
+          onClick={fetchRepos}
+          className="bg-blue-500 text-white px-4 py-2 rounded-md shadow hover:bg-blue-600 flex items-center"
+        >
+          <FiSearch className="mr-2" /> Search
+        </button>
+      </div>
 
       {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
+      {error && <p className="text-red-500">{error}</p>}
+
       <RepoList repos={repos} />
     </div>
   );
