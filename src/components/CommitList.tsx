@@ -33,7 +33,7 @@ const CommitList = ({ commits, loading }: CommitListProps) => {
             key={commit.sha}
             className="p-4 bg-gray-50 rounded-md hover:bg-gray-100 transition"
           >
-            <p className="text-gray-800">
+            <p className="text-gray-800 truncate">
               <strong>Commit Message:</strong> {commit.commit.message}
             </p>
             <p className="text-gray-500">

@@ -3,7 +3,7 @@ import { useState, useEffect, ChangeEvent } from "react";
 import { FiSearch } from "react-icons/fi";
 import repositoryService from "@/services/repositoryService";
 import RepoList from "@/components/RepoList";
-import Pagination from "@/components/Pagination";
+import PaginationWithPageSize from "@/components/Pagination";
 
 interface Repo {
   id: number;
@@ -16,9 +16,8 @@ const Home = () => {
   const [repos, setRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-
   const [page, setPage] = useState<number>(1);
-  const [perPage] = useState<number>(10);
+  const [perPage, setPerPage] = useState<number>(10);
   const [totalPages, setTotalPages] = useState<number>(1);
 
   const fetchRepos = async () => {
@@ -41,15 +40,10 @@ const Home = () => {
 
   useEffect(() => {
     fetchRepos();
-  }, [orgName, page]);
+  }, [orgName, page, perPage]);
 
   const handleOrgNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setOrgName(e.target.value);
-    setPage(1);
-  };
-
-  const handlePageChange = (newPage: number) => {
-    setPage(newPage);
   };
 
   return (
@@ -57,6 +51,7 @@ const Home = () => {
       <h1 className="text-3xl font-bold text-gray-800 mb-8">
         GitHub Projects Browser
       </h1>
+
       <div className="w-full max-w-lg flex items-center space-x-3 mb-6">
         <input
           type="text"
@@ -76,11 +71,12 @@ const Home = () => {
       {error && <p className="text-red-500">{error}</p>}
 
       <RepoList repos={repos} loading={loading} />
-
-      <Pagination
+      <PaginationWithPageSize
         currentPage={page}
         totalPages={totalPages}
-        onPageChange={handlePageChange}
+        perPage={perPage}
+        onPageChange={setPage}
+        onPageSizeChange={setPerPage}
       />
     </div>
   );

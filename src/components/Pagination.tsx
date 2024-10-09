@@ -1,49 +1,60 @@
 import React from "react";
 
-interface PaginationProps {
+interface PaginationWithPageSizeProps {
   currentPage: number;
   totalPages: number;
+  perPage: number;
   onPageChange: (page: number) => void;
+  onPageSizeChange: (size: number) => void;
 }
 
-const Pagination: React.FC<PaginationProps> = ({
+const PaginationWithPageSize: React.FC<PaginationWithPageSizeProps> = ({
   currentPage,
   totalPages,
+  perPage,
   onPageChange,
+  onPageSizeChange,
 }) => {
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      onPageChange(currentPage + 1);
-    }
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      onPageChange(currentPage - 1);
-    }
-  };
-
   return (
-    <div className="flex space-x-4 mt-6">
-      <button
-        onClick={handlePrevPage}
-        disabled={currentPage === 1}
-        className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md disabled:bg-gray-200"
-      >
-        Previous
-      </button>
-      <span className="text-gray-700">
-        Page {currentPage} of {totalPages}
-      </span>
-      <button
-        onClick={handleNextPage}
-        disabled={currentPage === totalPages}
-        className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-      >
-        Next
-      </button>
+    <div className="flex items-center justify-between my-4">
+      <div>
+        <label htmlFor="perPage" className="mr-2">
+          Items per page:
+        </label>
+        <select
+          id="perPage"
+          value={perPage}
+          onChange={(e) => onPageSizeChange(Number(e.target.value))}
+          className="border border-gray-300 rounded-md px-3 py-2"
+        >
+          <option value={5}>5</option>
+          <option value={10}>10</option>
+          <option value={20}>20</option>
+          <option value={50}>50</option>
+        </select>
+      </div>
+
+      <div>
+        <button
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="mr-2 px-3 py-2 bg-blue-500 text-white rounded-md disabled:bg-gray-300"
+        >
+          Previous
+        </button>
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="ml-2 px-3 py-2 bg-blue-500 text-white rounded-md disabled:bg-gray-300"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
 
-export default Pagination;
+export default PaginationWithPageSize;
