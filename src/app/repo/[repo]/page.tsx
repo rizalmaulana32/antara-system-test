@@ -1,8 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useRouter } from "next/router";
-import CommitList from "../components/CommitList";
+import CommitList from "../../../components/CommitList";
 
 interface Commit {
   sha: string;
@@ -15,9 +14,8 @@ interface Commit {
   };
 }
 
-const RepoCommits = () => {
-  const router = useRouter();
-  const { repo } = router.query;
+const RepoCommits = ({ params }: { params: { repo: string } }) => {
+  const { repo } = params;
   const [commits, setCommits] = useState<Commit[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");

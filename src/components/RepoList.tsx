@@ -25,7 +25,7 @@ const RepoList = ({ repos }: RepoListProps) => {
             key={repo.id}
             className="p-4 bg-gray-50 rounded-md hover:bg-gray-100 transition"
           >
-            <Link href={`/${repo.name}`}>
+            <Link href={`/repo/${repo.name}`}>
               <div className="flex justify-between items-center">
                 <span className="text-lg font-medium text-blue-600">
                   {repo.name}
