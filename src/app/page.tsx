@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect, ChangeEvent } from "react";
-import axios from "axios";
 import RepoList from "../components/RepoList";
 import { FiSearch } from "react-icons/fi";
+import repositoryService from "@/services/repositoryService";
 
 interface Repo {
   id: number;
@@ -20,17 +20,8 @@ const Home = () => {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.get<Repo[]>(
-        `https://api.github.com/orgs/${orgName}/repos`,
-        {
-          headers: {
-            Authorization: `token ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
-          },
-        }
-      );
-      setRepos(
-        response.data.sort((a, b) => b.stargazers_count - a.stargazers_count)
-      );
+      const repos = await repositoryService.getRepositories(orgName);
+      setRepos(repos);
     } catch (err) {
       console.error(err);
       setError("Failed to fetch repositories.");

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import CommitList from "../../../components/CommitList";
+import repositoryService from "@/services/repositoryService";
 
 interface Commit {
   sha: string;
@@ -25,15 +25,11 @@ const RepoCommits = ({ params }: { params: { repo: string } }) => {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.get<Commit[]>(
-        `https://api.github.com/repos/apache/${repo}/commits`,
-        {
-          headers: {
-            Authorization: `token ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
-          },
-        }
+      const commits = await repositoryService.getCommits(
+        "apache",
+        repo as string
       );
-      setCommits(response.data);
+      setCommits(commits);
     } catch (err) {
       console.error(err);
       setError("Failed to fetch commits.");
