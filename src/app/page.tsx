@@ -21,6 +21,7 @@ const Home = () => {
     setError("");
     try {
       const repos = await repositoryService.getRepositories(orgName);
+      setError("");
       setRepos(repos);
     } catch (err) {
       console.error(err);
@@ -58,10 +59,9 @@ const Home = () => {
         </button>
       </div>
 
-      {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
 
-      <RepoList repos={repos} />
+      <RepoList repos={repos} loading={loading} />
     </div>
   );
 };

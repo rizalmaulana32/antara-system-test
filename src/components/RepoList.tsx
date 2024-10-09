@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { FiStar } from "react-icons/fi";
+import SkeletonLoader from "./SkeletonLoader";
 
 interface Repo {
   id: number;
@@ -9,9 +10,13 @@ interface Repo {
 
 interface RepoListProps {
   repos: Repo[];
+  loading: boolean;
 }
 
-const RepoList = ({ repos }: RepoListProps) => {
+const RepoList = ({ repos, loading }: RepoListProps) => {
+  if (loading) {
+    return <SkeletonLoader rows={5} />;
+  }
   if (repos.length === 0) return <p>No repositories found.</p>;
 
   return (

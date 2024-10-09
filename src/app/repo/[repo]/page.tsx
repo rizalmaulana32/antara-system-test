@@ -29,6 +29,7 @@ const RepoCommits = ({ params }: { params: { repo: string } }) => {
         "apache",
         repo as string
       );
+      setError("");
       setCommits(commits);
     } catch (err) {
       console.error(err);
@@ -46,9 +47,8 @@ const RepoCommits = ({ params }: { params: { repo: string } }) => {
       <h1 className="text-3xl font-bold text-gray-800 mb-8">
         Recent Commits for {repo}
       </h1>
-      {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
-      <CommitList commits={commits} />
+      <CommitList commits={commits} loading={loading} />
     </div>
   );
 };

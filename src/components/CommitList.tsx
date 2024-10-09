@@ -1,3 +1,5 @@
+import SkeletonLoader from "./SkeletonLoader";
+
 interface Commit {
   sha: string;
   commit: {
@@ -11,9 +13,13 @@ interface Commit {
 
 interface CommitListProps {
   commits: Commit[];
+  loading: boolean;
 }
 
-const CommitList = ({ commits }: CommitListProps) => {
+const CommitList = ({ commits, loading }: CommitListProps) => {
+  if (loading) {
+    return <SkeletonLoader rows={5} />;
+  }
   if (commits.length === 0) return <p>No commits found.</p>;
 
   return (
@@ -27,7 +33,9 @@ const CommitList = ({ commits }: CommitListProps) => {
             key={commit.sha}
             className="p-4 bg-gray-50 rounded-md hover:bg-gray-100 transition"
           >
-            <p className="text-gray-800">{commit.commit.message}</p>
+            <p className="text-gray-800">
+              <strong>Commit Message:</strong> {commit.commit.message}
+            </p>
             <p className="text-gray-500">
               <strong>Author:</strong> {commit.commit.author.name}
             </p>
