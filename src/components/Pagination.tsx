@@ -16,7 +16,7 @@ const PaginationWithPageSize: React.FC<PaginationWithPageSizeProps> = ({
   onPageSizeChange,
 }) => {
   return (
-    <div className="flex items-center justify-between my-4">
+    <div className="flex flex-col md:flex-row gap-4 items-center justify-between my-4 w-full px-5">
       <div>
         <label htmlFor="perPage" className="mr-2">
           Items per page:

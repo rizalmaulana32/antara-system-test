@@ -47,7 +47,7 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10">
+    <div className="min-h-screen flex flex-col items-center py-10">
       <h1 className="text-3xl font-bold text-gray-800 mb-8">
         GitHub Projects Browser
       </h1>

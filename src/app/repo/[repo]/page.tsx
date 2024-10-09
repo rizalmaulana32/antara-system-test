@@ -48,7 +48,7 @@ const RepoCommits = ({ params }: { params: { repo: string } }) => {
   }, [repo, page, perPage]);
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10">
+    <div className="min-h-screen flex flex-col items-center py-10">
       <h1 className="text-3xl font-bold text-gray-800 mb-8">
         Recent Commits for {repo}
       </h1>
