@@ -18,10 +18,20 @@ interface Commit {
 }
 
 class RepositoryService {
-  async getRepositories(orgName: string): Promise<Repo[]> {
+  async getRepositories(
+    orgName: string,
+    page: number = 1,
+    perPage: number = 10
+  ): Promise<Repo[]> {
     try {
       const response = await axiosInstance.get<Repo[]>(
-        `/orgs/${orgName}/repos`
+        `/orgs/${orgName}/repos`,
+        {
+          params: {
+            page,
+            per_page: perPage,
+          },
+        }
       );
       return response.data.sort(
         (a, b) => b.stargazers_count - a.stargazers_count
@@ -32,10 +42,21 @@ class RepositoryService {
     }
   }
 
-  async getCommits(orgName: string, repoName: string): Promise<Commit[]> {
+  async getCommits(
+    orgName: string,
+    repoName: string,
+    page: number = 1,
+    perPage: number = 10
+  ): Promise<Commit[]> {
     try {
       const response = await axiosInstance.get<Commit[]>(
-        `/repos/${orgName}/${repoName}/commits`
+        `/repos/${orgName}/${repoName}/commits`,
+        {
+          params: {
+            page,
+            per_page: perPage,
+          },
+        }
       );
       return response.data;
     } catch (error) {

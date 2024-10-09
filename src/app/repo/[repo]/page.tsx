@@ -1,7 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import CommitList from "../../../components/CommitList";
 import repositoryService from "@/services/repositoryService";
+import CommitList from "@/components/CommitList";
+import Pagination from "@/components/Pagination";
 
 interface Commit {
   sha: string;
@@ -20,6 +21,10 @@ const RepoCommits = ({ params }: { params: { repo: string } }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
+  const [page, setPage] = useState<number>(1);
+  const [perPage] = useState<number>(10);
+  const [totalPages, setTotalPages] = useState<number>(1);
+
   const fetchCommits = async () => {
     if (!repo) return;
     setLoading(true);
@@ -27,10 +32,12 @@ const RepoCommits = ({ params }: { params: { repo: string } }) => {
     try {
       const commits = await repositoryService.getCommits(
         "apache",
-        repo as string
+        repo,
+        page,
+        perPage
       );
-      setError("");
       setCommits(commits);
+      setTotalPages(5);
     } catch (err) {
       console.error(err);
       setError("Failed to fetch commits.");
@@ -40,7 +47,11 @@ const RepoCommits = ({ params }: { params: { repo: string } }) => {
 
   useEffect(() => {
     fetchCommits();
-  }, [repo]);
+  }, [repo, page]);
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10">
@@ -49,6 +60,12 @@ const RepoCommits = ({ params }: { params: { repo: string } }) => {
       </h1>
       {error && <p className="text-red-500">{error}</p>}
       <CommitList commits={commits} loading={loading} />
+
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };

@@ -1,8 +1,9 @@
 "use client";
 import { useState, useEffect, ChangeEvent } from "react";
-import RepoList from "../components/RepoList";
 import { FiSearch } from "react-icons/fi";
 import repositoryService from "@/services/repositoryService";
+import RepoList from "@/components/RepoList";
+import Pagination from "@/components/Pagination";
 
 interface Repo {
   id: number;
@@ -16,13 +17,21 @@ const Home = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
+  const [page, setPage] = useState<number>(1);
+  const [perPage] = useState<number>(10);
+  const [totalPages, setTotalPages] = useState<number>(1);
+
   const fetchRepos = async () => {
     setLoading(true);
     setError("");
     try {
-      const repos = await repositoryService.getRepositories(orgName);
-      setError("");
+      const repos = await repositoryService.getRepositories(
+        orgName,
+        page,
+        perPage
+      );
       setRepos(repos);
+      setTotalPages(5);
     } catch (err) {
       console.error(err);
       setError("Failed to fetch repositories.");
@@ -32,10 +41,15 @@ const Home = () => {
 
   useEffect(() => {
     fetchRepos();
-  }, [orgName]);
+  }, [orgName, page]);
 
   const handleOrgNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setOrgName(e.target.value);
+    setPage(1);
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
   };
 
   return (
@@ -62,6 +76,12 @@ const Home = () => {
       {error && <p className="text-red-500">{error}</p>}
 
       <RepoList repos={repos} loading={loading} />
+
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };
