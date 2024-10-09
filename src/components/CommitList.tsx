@@ -13,17 +13,18 @@ interface Commit {
 
 interface CommitListProps {
   commits: Commit[];
+  skeletonCount: number;
   loading: boolean;
 }
 
-const CommitList = ({ commits, loading }: CommitListProps) => {
+const CommitList = ({ commits, skeletonCount, loading }: CommitListProps) => {
   if (loading) {
-    return <SkeletonLoader rows={5} />;
+    return <SkeletonLoader rows={skeletonCount} />;
   }
   if (commits.length === 0) return <p>No commits found.</p>;
 
   return (
-    <div className="w-full max-w-3xl bg-white shadow-md rounded-lg p-4">
+    <div className="w-full bg-white shadow-md rounded-lg p-4">
       <h2 className="text-2xl font-semibold text-gray-800 mb-4">
         Recent Commits
       </h2>

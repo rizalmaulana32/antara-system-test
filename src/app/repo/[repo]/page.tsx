@@ -55,7 +55,7 @@ const RepoCommits = ({ params }: { params: { repo: string } }) => {
 
       {error && <p className="text-red-500">{error}</p>}
 
-      <CommitList commits={commits} loading={loading} />
+      <CommitList commits={commits} skeletonCount={perPage} loading={loading} />
       <PaginationWithPageSize
         currentPage={page}
         totalPages={totalPages}
