@@ -70,7 +70,7 @@ const Home = () => {
 
       {error && <p className="text-red-500">{error}</p>}
 
-      <RepoList repos={repos} loading={loading} />
+      <RepoList repos={repos} skeletonCount={perPage} loading={loading} />
       <PaginationWithPageSize
         currentPage={page}
         totalPages={totalPages}
