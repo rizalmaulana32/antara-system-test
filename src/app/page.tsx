@@ -1,49 +1,31 @@
 "use client";
-import { useState, useEffect, ChangeEvent } from "react";
 import { FiSearch } from "react-icons/fi";
 import repositoryService from "@/services/repositoryService";
-import RepoList from "@/components/RepoList";
-import PaginationWithPageSize from "@/components/Pagination";
-
-interface Repo {
-  id: number;
-  name: string;
-  stargazers_count: number;
-}
+import { useState } from "react";
+import useInfiniteScroll from "@/lib/useInfiniteScroll";
+import RepoList from "@/components/features/repo/RepoList";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 const Home = () => {
   const [orgName, setOrgName] = useState<string>("apache");
-  const [repos, setRepos] = useState<Repo[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
-  const [page, setPage] = useState<number>(1);
-  const [perPage, setPerPage] = useState<number>(10);
-  const [totalPages, setTotalPages] = useState<number>(1);
 
-  const fetchRepos = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const repos = await repositoryService.getRepositories(
-        orgName,
-        page,
-        perPage
-      );
-      setRepos(repos);
-      setTotalPages(5);
-    } catch (err) {
-      console.error(err);
-      setError("Failed to fetch repositories.");
-    }
-    setLoading(false);
-  };
+  const {
+    data: repos,
+    loading,
+    error,
+    hasMore,
+    setPage,
+    setData,
+    setHasMore,
+  } = useInfiniteScroll(async (page, perPage) => {
+    return await repositoryService.getRepositories(orgName, page, perPage);
+  });
 
-  useEffect(() => {
-    fetchRepos();
-  }, [orgName, page, perPage]);
-
-  const handleOrgNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleOrgNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setOrgName(e.target.value);
+    setData([]);
+    setPage(1);
+    setHasMore(true);
   };
 
   return (
@@ -51,7 +33,6 @@ const Home = () => {
       <h1 className="text-3xl font-bold text-gray-800 mb-8">
         GitHub Projects Browser
       </h1>
-
       <div className="w-full max-w-lg flex items-center space-x-3 mb-6">
         <input
           type="text"
@@ -61,23 +42,16 @@ const Home = () => {
           placeholder="Enter GitHub organization name"
         />
         <button
-          onClick={fetchRepos}
+          onClick={() => setPage((prevPage) => prevPage + 1)}
           className="bg-blue-500 text-white px-4 py-2 rounded-md shadow hover:bg-blue-600 flex items-center"
         >
           <FiSearch className="mr-2" /> Search
         </button>
       </div>
-
       {error && <p className="text-red-500">{error}</p>}
-
-      <RepoList repos={repos} skeletonCount={perPage} loading={loading} />
-      <PaginationWithPageSize
-        currentPage={page}
-        totalPages={totalPages}
-        perPage={perPage}
-        onPageChange={setPage}
-        onPageSizeChange={setPerPage}
-      />
+      <RepoList repos={repos} />
+      {loading && <LoadingSpinner />}
+      {!hasMore && <p>No more repositories available.</p>}
     </div>
   );
 };

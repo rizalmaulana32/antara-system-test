@@ -1,68 +1,31 @@
 "use client";
-import { useState, useEffect } from "react";
 import repositoryService from "@/services/repositoryService";
-import CommitList from "@/components/CommitList";
-import PaginationWithPageSize from "@/components/Pagination";
-
-interface Commit {
-  sha: string;
-  commit: {
-    message: string;
-    author: {
-      name: string;
-      date: string;
-    };
-  };
-}
+import SkeletonLoader from "@/components/ui/SkeletonLoader";
+import { Commit } from "@/types/types";
+import useInfiniteScroll from "@/lib/useInfiniteScroll";
+import CommitList from "@/components/features/commit/CommitList";
 
 const RepoCommits = ({ params }: { params: { repo: string } }) => {
   const { repo } = params;
-  const [commits, setCommits] = useState<Commit[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
-  const [page, setPage] = useState<number>(1);
-  const [perPage, setPerPage] = useState<number>(10);
-  const [totalPages, setTotalPages] = useState<number>(1);
 
-  const fetchCommits = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const commits = await repositoryService.getCommits(
-        "apache",
-        repo,
-        page,
-        perPage
-      );
-      setCommits(commits);
-      setTotalPages(5);
-    } catch (err) {
-      console.error(err);
-      setError("Failed to fetch commits.");
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchCommits();
-  }, [repo, page, perPage]);
+  const {
+    data: commits,
+    loading,
+    error,
+    hasMore,
+  } = useInfiniteScroll<Commit>(async (page, perPage) => {
+    return await repositoryService.getCommits("apache", repo, page, perPage);
+  });
 
   return (
     <div className="min-h-screen flex flex-col items-center py-10">
       <h1 className="text-3xl font-bold text-gray-800 mb-8">
         Recent Commits for {repo}
       </h1>
-
       {error && <p className="text-red-500">{error}</p>}
-
-      <CommitList commits={commits} skeletonCount={perPage} loading={loading} />
-      <PaginationWithPageSize
-        currentPage={page}
-        totalPages={totalPages}
-        perPage={perPage}
-        onPageChange={setPage}
-        onPageSizeChange={setPerPage}
-      />
+      <CommitList commits={commits} />
+      {loading && <SkeletonLoader rows={2} />}
+      {!hasMore && <p>No more commits available.</p>}
     </div>
   );
 };
