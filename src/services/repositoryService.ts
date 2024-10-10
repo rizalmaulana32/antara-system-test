@@ -21,7 +21,10 @@ class RepositoryService {
   async getRepositories(
     orgName: string,
     page: number = 1,
-    perPage: number = 10
+    perPage: number = 10,
+    type: string = "all",
+    sort: string = "created",
+    direction: string = "asc"
   ): Promise<Repo[]> {
     try {
       const response = await axiosInstance.get<Repo[]>(
@@ -30,6 +33,9 @@ class RepositoryService {
           params: {
             page,
             per_page: perPage,
+            type,
+            sort,
+            direction,
           },
         }
       );
