@@ -6,33 +6,37 @@ interface CommitListProps {
 }
 
 const CommitList = ({ commits }: CommitListProps) => {
-  if (commits.length === 0) return <p>No commits found.</p>;
+  if (commits.length === 0)
+    return <p className="text-gray-500">No commits found.</p>;
 
   return (
-    <div className="w-full bg-white shadow-md rounded-lg p-4">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+    <div className="w-full bg-white dark:bg-gray-800 shadow-md rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+      <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
         Recent Commits
       </h2>
       <ul className="space-y-4">
         {commits.map((commit) => (
           <li
             key={commit.sha}
-            className="p-4 bg-gray-50 rounded-md hover:bg-gray-100 transition"
+            className="p-4 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition border border-gray-200 dark:border-gray-600"
           >
-            <p className="text-gray-800 truncate">
+            <p className="text-gray-800 dark:text-gray-200 truncate">
               <strong>Commit Message:</strong> {commit.commit.message}
             </p>
             <p className="text-gray-500 flex items-center gap-1">
               {commit?.committer?.avatar_url && (
                 <Image
-                  className="w-[20px] h-[20px] rounded-full bg-white"
+                  className="w-6 h-6 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600"
                   src={commit?.committer.avatar_url}
                   alt={`${commit.commit.author.name}'s avatar`}
-                  width={20}
-                  height={20}
+                  width={24}
+                  height={24}
                 />
               )}
-              <strong>Author:</strong> {commit.commit.author.name}
+              <strong className="text-gray-900 dark:text-gray-200">
+                Author:
+              </strong>{" "}
+              {commit.commit.author.name}
             </p>
             <p className="text-gray-500">
               <strong>Date:</strong>{" "}
