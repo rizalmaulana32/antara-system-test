@@ -4,7 +4,7 @@ A web application for browsing repositories and commits of a GitHub organization
 ## 🌐Live Demo
 You can access the online version of this application at:
 
-[Live Demo URL](https://www.google.com)
+[Live Demo URL](https://antara-system-test.netlify.app/)
 
 ## 🛠️ Features
 - Search and filter GitHub repositories by organization name.
@@ -21,7 +21,7 @@ You can access the online version of this application at:
 ## ⚙️ Installation
 1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/github-projects-browser.git
+git clone https://github.com/rizalmaulana32/antara-system-test.git
 ```
 2. Go to project directory
 ```bash
