@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GitHub Projects Browser
+A web application for browsing repositories and commits of a GitHub organization. You can search by organization, filter repositories by type, sort, and direction, and view recent commits for each repository.
 
-## Getting Started
+## 🌐Live Demo
+You can access the online version of this application at:
 
-First, run the development server:
+[Live Demo URL](https://www.google.com)
 
+## 🛠️ Features
+- Search and filter GitHub repositories by organization name.
+- Filter repositories by type, sort, and direction.
+- View a list of recent commits for any selected repository.
+- Infinite scrolling for both repositories and commits.
+- Dark mode support.
+
+## 🚀 Getting Started
+**Prerequisites**
+- Node.js (version 14.x or higher)
+- GitHub Personal Access Token (for accessing the GitHub API)
+
+## ⚙️ Installation
+1. Clone the repository:
+```bash
+git clone https://github.com/your-username/github-projects-browser.git
+```
+2. Go to project directory
+```bash
+cd github-projects-browser
+```
+3. Install dependencies:
+```bash
+npm install
+```
+4. In the project root directory, create a .env.local file by copying the env.example file and filling in your GitHub token and base URL.
+```bash
+cp .env.example .env.local
+```
+5. Open the .env.local file and fill in the required variables:
+```bash
+NEXT_PUBLIC_GITHUB_TOKEN=your_github_personal_access_token
+NEXT_PUBLIC_BASE_URL=https://api.github.com
+```
+&emsp;&emsp; NEXT_PUBLIC_GITHUB_TOKEN: Your GitHub personal access token for accessing the GitHub API.
+
+&emsp;&emsp; NEXT_PUBLIC_BASE_URL: The base URL for the GitHub API (typically https://api.github.com).
+
+## 🏃‍♂️ Running the Project
+To run the development server:
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
+Open http://localhost:3000 to view the application in your browser.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔧 Building for Production
+To create an optimized build for production:
+```bash
+npm run build
+```
+Then, start the production server:
+```bash
+npm run start
+```
